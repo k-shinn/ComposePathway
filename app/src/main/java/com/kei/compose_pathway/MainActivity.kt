@@ -23,6 +23,8 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.kei.compose_pathway.ui.theme.ComposePathwayTheme
 import kotlinx.coroutines.launch
@@ -35,6 +37,36 @@ class MainActivity : ComponentActivity() {
             ComposePathwayTheme {
                 BodyContent()
             }
+        }
+    }
+}
+
+@Composable
+fun ConstraintLayoutContent() {
+    ConstraintLayout {
+        val (button1, button2, text) = createRefs()
+
+        Button(onClick = { /*TODO*/ },
+            modifier = Modifier.constrainAs(button1) {
+                top.linkTo(parent.top, margin = 16.dp)
+            }
+        ) {
+            Text(text = "button1")
+        }
+
+        Text(text = "text",
+            modifier = Modifier.constrainAs(text) {
+                top.linkTo(button1.bottom, margin = 16.dp)
+                centerHorizontallyTo(parent)
+            })
+
+        val barrier = createEndBarrier(button1, text)
+        Button(onClick = { /*TODO*/ },
+            modifier = Modifier.constrainAs(button2) {
+                top.linkTo(parent.top, margin = 16.dp)
+                start.linkTo(barrier)
+            }) {
+            Text(text = "button2")
         }
     }
 }
@@ -258,8 +290,9 @@ fun SimpleList() {
 @Composable
 fun DefaultPreview() {
     ComposePathwayTheme {
-        BodyContent()
+//        BodyContent()
 //        LayoutCodeLab()
 //        Chip(text = "Hi there")
+        ConstraintLayoutContent()
     }
 }
